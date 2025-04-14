@@ -1,16 +1,23 @@
-# twitter-clone/Dockerfile
+# twitter-clone/Dockerfile (Using Yarn v1)
 
 # Stage 1: Install dependencies
 FROM node:18-alpine AS deps
 WORKDIR /app
-COPY package.json package-lock.json ./
-# Use npm ci for faster, more reliable installs based on lockfile
-RUN npm ci
+# Copy package.json AND yarn.lock
+COPY package.json yarn.lock ./
+# Install dependencies using Yarn
+RUN yarn install --frozen-lockfile --production
 
 # Stage 2: Build the application
 FROM node:18-alpine AS builder
 WORKDIR /app
+# Copy production node_modules first
 COPY --from=deps /app/node_modules ./node_modules
+# Copy package files again (needed for devDependencies)
+COPY package.json yarn.lock ./
+# Install ALL dependencies (including dev) for build
+RUN yarn install --frozen-lockfile
+# Copy the rest of the source code
 COPY . .
 
 # Set NODE_ENV to production for Next.js build optimizations
@@ -24,8 +31,9 @@ ENV NODE_ENV production
 # ENV NEXT_PUBLIC_UPLOADTHING_URL=$NEXT_PUBLIC_UPLOADTHING_URL
 # --------------------------------------------------------
 
-# Build the Next.js application (ensure 'standalone' output is configured in next.config.js)
-RUN npm run build
+# Build the Next.js application using Yarn
+# (Ensure 'standalone' output is configured in next.config.js)
+RUN yarn build
 
 # Stage 3: Production image (using Next.js standalone output)
 FROM node:18-alpine AS runner
@@ -40,7 +48,7 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy the standalone Next.js server output
+# Copy the standalone Next.js server output from the builder stage
 # Important: Ensure ownership is set for the non-root user
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 # Copy static assets
