@@ -13,14 +13,11 @@ const queryClient = new QueryClient();
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export default function App({ Component, pageProps }: AppProps) {
-  if (!googleClientId) {
-    console.error("FATAL: NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set!");
-    return <div>Error: Google Client ID configuration is missing.</div>;
-  }
   return (
     <div className={inter.className}>
       <QueryClientProvider client={queryClient}>
-        <GoogleOAuthProvider clientId={googleClientId}>
+        {/* <GoogleOAuthProvider clientId="1067474376899-8bn30uk5cl68cv6oqic6u0aopsgngg82.apps.googleusercontent.com"> */}
+        <GoogleOAuthProvider clientId="158032694733-s707gkhabfb0cu4tvnl842umccdvq3o0.apps.googleusercontent.com">
           <Component {...pageProps} />
           <Toaster />
           <ReactQueryDevtools />
