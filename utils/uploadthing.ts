@@ -6,7 +6,7 @@ import {
 } from "@uploadthing/react";
 
 // Define the URL for your backend. Use an environment variable.
-const backendUrl = process.env.NEXT_PUBLIC_UPLOADTHING_URL;
+const backendUrl = "https://kartikey-twitter.onrender.com/api/uploadthing";
 
 // --- Generate Components with URL Config ---
 // Note: The docs are a bit ambiguous if generateUploadButton/Dropzone

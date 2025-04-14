@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request";
 
 // Get the URL from environment variables
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+const apiUrl = "https://kartikey-twitter.onrender.com/graphql";
 
 // --- Add this check ---
 if (!apiUrl || typeof apiUrl !== "string" || apiUrl.trim() === "") {
@@ -20,16 +20,13 @@ if (!apiUrl || typeof apiUrl !== "string" || apiUrl.trim() === "") {
 }
 const isClient = typeof window !== "undefined";
 
-export const graphqlClient = new GraphQLClient(
-  apiUrl as string,
-  {
-    headers: () => ({
-      Authorization: isClient
-        ? `Bearer ${window.localStorage.getItem("__twitter_token")}`
-        : process.env.SERVER_API_TOKEN || "", // Add server-side token
-    }),
-  }
-);
+export const graphqlClient = new GraphQLClient(apiUrl as string, {
+  headers: () => ({
+    Authorization: isClient
+      ? `Bearer ${window.localStorage.getItem("__twitter_token")}`
+      : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoic2VydmVyIiwiaWF0IjoxNzQ0NjY3MTk2LCJleHAiOjE3NzYyMDMxOTZ9.w69S2D6ouT2l_Wpro6osC4j7xOyQ8SruRcJH1y7SxNU", // Add server-side token
+  }),
+});
 
 // Optional: Log the URL the client *is* using
 console.log(

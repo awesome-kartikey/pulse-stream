@@ -10,7 +10,6 @@ const inter = Inter({ subsets: ["latin"] });
 const quickSand = Quicksand({ subsets: ["latin"] });
 
 const queryClient = new QueryClient();
-const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
