@@ -21,7 +21,7 @@ if (!apiUrl || typeof apiUrl !== "string" || apiUrl.trim() === "") {
 const isClient = typeof window !== "undefined";
 
 export const graphqlClient = new GraphQLClient(
-  process.env.NEXT_PUBLIC_API_URL as string,
+  apiUrl as string,
   {
     headers: () => ({
       Authorization: isClient
